@@ -52,8 +52,8 @@ if (root) {
   root.addEventListener('click', e => { if (e.target === root || e.target.closest('[data-lightbox-close]')) closeModal(); });
 }
 body.insertAdjacentHTML('beforeend', '<aside class="cookie-bar" data-cookie-bar hidden aria-label="Informacja o prywatności"><p>Bez analityki i reklam. Możemy zapamiętać przeczytanie tej informacji wyłącznie w tej przeglądarce (localStorage). <a href="cookies.html">Szczegóły</a></p><div class="cookie-actions"><button data-cookie-dismiss type="button">Zamknij bez zapisu</button><button data-cookie-remember type="button">Zapamiętaj</button></div><p data-storage-error hidden role="status">Zapis jest niedostępny w tej przeglądarce.</p></aside><div class="cookie-settings" data-cookie-settings hidden><section class="cookie-dialog" role="dialog" aria-modal="true" aria-labelledby="cookie-title"><h2 id="cookie-title">Ustawienia prywatności</h2><p>Nie używamy analityki, reklam ani cookies śledzących. Możesz zapamiętać przeczytanie informacji w localStorage lub usunąć ten zapis.</p><p data-preference-status role="status"></p><div class="cookie-actions"><button data-cookie-close type="button">Zamknij</button><button data-cookie-remove type="button">Usuń zapis</button><button data-cookie-save type="button">Zapamiętaj</button></div></section></div>');
-footer.querySelector('.footer-bottom span:last-child')?.insertAdjacentHTML('beforeend','<button class="cookie-open" data-cookie-open type="button">Ustawienia prywatności</button>');
-const key = 'mk-cookie-preferences';
+footer.querySelector('.footer-bottom > span:last-child')?.insertAdjacentHTML('beforeend','<button class="cookie-open" data-cookie-open type="button">Ustawienia prywatności</button>');
+const key = 'mk-editorial-privacy-v3';
 const bar = document.querySelector('[data-cookie-bar]');
 const settings = document.querySelector('[data-cookie-settings]');
 const status = document.querySelector('[data-preference-status]');
