@@ -40,13 +40,27 @@ function closeModal() {
 const root = document.querySelector('[data-lightbox-root]');
 const image = root?.querySelector('[data-lightbox-image]');
 if (root) {
+  const links = [...document.querySelectorAll('[data-lightbox]')];
+  let index = 0;
+  root.insertAdjacentHTML('beforeend','<div class="lightbox-navigation"><button type="button" data-previous aria-label="Poprzednie zdjęcie">←</button><p data-photo-count aria-live="polite"></p><button type="button" data-next aria-label="Następne zdjęcie">→</button></div>');
+  function showPhoto(next) {
+    index = (next + links.length) % links.length;
+    image.src = links[index].href;
+    image.alt = links[index].querySelector('img')?.alt || 'Zdjęcie — Unifora Interieur';
+    root.querySelector('[data-photo-count]').textContent = `${index + 1} / ${links.length}`;
+  }
+  root.querySelector('[data-previous]').addEventListener('click', () => showPhoto(index - 1));
+  root.querySelector('[data-next]').addEventListener('click', () => showPhoto(index + 1));
+  root.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); showPhoto(index + (e.key === 'ArrowRight' ? 1 : -1)); }
+  });
   root.setAttribute('role', 'dialog');
   root.setAttribute('aria-modal', 'true');
   root.setAttribute('aria-label', 'Podgląd zdjęcia — Unifora Interieur');
   document.querySelectorAll('[data-lightbox]').forEach(link => link.addEventListener('click', event => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
-    image.src = link.href;
-    image.alt = link.querySelector('img')?.alt || 'Zdjęcie — Unifora Interieur';
+    showPhoto(links.indexOf(link));
     openModal(root);
   }));
   root.addEventListener('click', e => { if (e.target === root || e.target.closest('[data-lightbox-close]')) closeModal(); });
