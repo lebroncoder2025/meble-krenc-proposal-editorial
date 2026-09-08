@@ -1,24 +1,7 @@
 const body = document.body;
-const menu = document.querySelector('.menu');
-const nav = document.querySelector('.nav');
-const main = document.querySelector('main');
 const footer = document.querySelector('.footer');
 let modal = null;
 let returnFocus = null;
-function setMenu(open) {
-  menu?.setAttribute('aria-expanded', String(open));
-  nav?.classList.toggle('is-open', open);
-  body.classList.toggle('menu-open', open);
-  main.inert = open;
-  footer.inert = open;
-  if (open) nav.querySelector('a')?.focus();
-}
-menu?.addEventListener('click', () => setMenu(menu.getAttribute('aria-expanded') !== 'true'));
-nav?.querySelectorAll('a').forEach(a => {
-  if (a.getAttribute('href') === (location.pathname.split('/').pop() || 'index.html')) a.setAttribute('aria-current', 'page');
-  a.addEventListener('click', () => setMenu(false));
-});
-matchMedia('(min-width:641px)').addEventListener('change', e => { if (e.matches) setMenu(false); });
 document.querySelectorAll('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
 function openModal(el) {
   returnFocus = document.activeElement;
@@ -66,13 +49,11 @@ if (root) {
   root.addEventListener('click', e => { if (e.target === root || e.target.closest('[data-lightbox-close]')) closeModal(); });
 }
 document.addEventListener('keydown', e => {
-  const menuOpen = menu?.getAttribute('aria-expanded') === 'true';
   if (e.key === 'Escape') {
     if (modal) closeModal();
-    else if (menuOpen) { setMenu(false); menu.focus(); }
   }
   if (e.key !== 'Tab') return;
-  const scope = modal || (menuOpen ? document.querySelector('.header') : null);
+  const scope = modal;
   if (!scope) return;
   const items = Array.from(scope.querySelectorAll('a[href],button:not([disabled]),input:not([disabled])')).filter(el => el.getClientRects().length);
   const first = items[0], last = items[items.length - 1];
