@@ -42,7 +42,7 @@ const image = root?.querySelector('[data-lightbox-image]');
 if (root) {
   const links = [...document.querySelectorAll('[data-lightbox]')];
   let index = 0;
-  root.insertAdjacentHTML('beforeend','<div class="lightbox-navigation"><button type="button" data-previous aria-label="Poprzednie zdjęcie">←</button><p data-photo-count aria-live="polite"></p><button type="button" data-next aria-label="Następne zdjęcie">→</button></div>');
+  root.insertAdjacentHTML('beforeend','<div class="lightbox-navigation"><button type="button" data-previous aria-label="Poprzednie zdjęcie"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12H4m6-6-6 6 6 6"/></svg></button><p data-photo-count aria-live="polite"></p><button type="button" data-next aria-label="Następne zdjęcie"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button></div>');
   function showPhoto(next) {
     index = (next + links.length) % links.length;
     image.src = links[index].href;
@@ -65,39 +65,6 @@ if (root) {
   }));
   root.addEventListener('click', e => { if (e.target === root || e.target.closest('[data-lightbox-close]')) closeModal(); });
 }
-body.insertAdjacentHTML('beforeend', '<aside class="cookie-bar" data-cookie-bar hidden aria-label="Informacja o prywatności"><p>Bez analityki i reklam. Możemy zapamiętać przeczytanie tej informacji wyłącznie w tej przeglądarce (localStorage). <a href="cookies.html">Szczegóły</a></p><div class="cookie-actions"><button data-cookie-dismiss type="button">Zamknij bez zapisu</button><button data-cookie-remember type="button">Zapamiętaj</button></div><p data-storage-error hidden role="status">Zapis jest niedostępny w tej przeglądarce.</p></aside><div class="cookie-settings" data-cookie-settings hidden><section class="cookie-dialog" role="dialog" aria-modal="true" aria-labelledby="cookie-title"><h2 id="cookie-title">Ustawienia prywatności</h2><p>Nie używamy analityki, reklam ani cookies śledzących. Możesz zapamiętać przeczytanie informacji w localStorage lub usunąć ten zapis.</p><p data-preference-status role="status"></p><div class="cookie-actions"><button data-cookie-close type="button">Zamknij</button><button data-cookie-remove type="button">Usuń zapis</button><button data-cookie-save type="button">Zapamiętaj</button></div></section></div>');
-footer.querySelector('.footer-bottom > span:last-child')?.insertAdjacentHTML('beforeend','<button class="cookie-open" data-cookie-open type="button">Ustawienia prywatności</button>');
-const key = 'mk-editorial-privacy-v3';
-const bar = document.querySelector('[data-cookie-bar]');
-const settings = document.querySelector('[data-cookie-settings]');
-const status = document.querySelector('[data-preference-status]');
-let remembered = false;
-try { remembered = Boolean(localStorage.getItem(key)); } catch {}
-bar.hidden = remembered;
-document.querySelector('[data-cookie-dismiss]').addEventListener('click', () => { bar.hidden = true; });
-function remember() {
-  try {
-    localStorage.setItem(key, 'acknowledged');
-    remembered = true;
-    bar.hidden = true;
-    if (modal === settings) closeModal();
-  } catch {
-    if (modal === settings) status.textContent = 'Zapis jest niedostępny w tej przeglądarce.';
-    else document.querySelector('[data-storage-error]').hidden = false;
-  }
-}
-document.querySelector('[data-cookie-remember]').addEventListener('click', remember);
-document.querySelector('[data-cookie-save]').addEventListener('click', remember);
-document.querySelector('[data-cookie-open]').addEventListener('click', () => {
-  status.textContent = remembered ? 'Informacja została zapamiętana.' : 'Brak zapisanego potwierdzenia.';
-  openModal(settings);
-});
-document.querySelector('[data-cookie-close]').addEventListener('click', closeModal);
-document.querySelector('[data-cookie-remove]').addEventListener('click', () => {
-  try { localStorage.removeItem(key); remembered = false; status.textContent = 'Zapis został usunięty.'; }
-  catch { status.textContent = 'Pamięć przeglądarki jest niedostępna.'; }
-});
-settings.addEventListener('click', e => { if (e.target === settings) closeModal(); });
 document.addEventListener('keydown', e => {
   const menuOpen = menu?.getAttribute('aria-expanded') === 'true';
   if (e.key === 'Escape') {
